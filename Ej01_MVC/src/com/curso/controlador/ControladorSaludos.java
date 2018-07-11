@@ -16,7 +16,7 @@ public class ControladorSaludos {
 	}
 
 	
-	@RequestMapping("/saludar")  //value="/saludar"
+	@RequestMapping("saludar")  //value="/saludar"
 	public ModelAndView saludar(HttpServletRequest request){
 		System.out.println("============================================");
 		String nombre = request.getParameter("nombre");
