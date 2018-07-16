@@ -1,0 +1,14 @@
+Proyecto ejemplo para servicios REST
+
+este es un endpoint de consulta para lista todos los datos:
+http://localhost:8080/Ej05_REST/servicio/peliculas
+
+Proyecto con java 1.7
+
+Pagina de inicio
+
+http://localhost:8080/Ej05_REST/peliculas.html
+
+Hacer una base de datos llamada bbdd  ,  una tabla pelicula con campos id,titulo,directos,genero,year
+
+El proyecto tiene problemas en los botones de insertar,modificar,borrar,vaciar

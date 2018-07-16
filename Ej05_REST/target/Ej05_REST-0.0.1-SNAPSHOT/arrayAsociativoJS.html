@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<script type="text/javascript">
+
+function prueba(){
+	
+	/*
+	var personas = [ { "nombre"    : "Ringo",
+				       "direccion" : "C/1",
+				       "telefono"  : "123" },
+				     { "nombre"    : "Paul",
+				       "direccion" : "C/2",
+				       "telefono"  : "456" },
+				     { "nombre"    : "George",
+				       "direccion" : "C/3",
+				       "telefono"  : "456" },
+				     { "nombre"    : "John",
+				       "direccion" : "C/4",
+				       "telefono"  : "456" } ];	*/
+			
+   	var respuesta = '[ { "nombre"    : "ringo", "direccion" : "C/1", "telefono"  : "123" }, { "nombre"    : "paul", "direccion" : "C/2", "telefono"  : "456" }, { "nombre"    : "george", "direccion" : "C/3", "telefono"  : "456" }, { "nombre"    : "john", "direccion" : "C/4", "telefono"  : "456" } ]';
+	var personas  = eval(respuesta);  				       
+	
+	for(var a=0; a<personas.length; a++){
+		alert(personas[a].nombre);
+	}	
+	
+}
+
+</script>
+
+<body onload="prueba()">
+
+	<marquee>
+		<h2>
+			<font color="orange">
+				Ejemplo de array asociativo con javascript.
+			</font>
+		</h2>
+	</marquee>
+
+</body>
+</html>

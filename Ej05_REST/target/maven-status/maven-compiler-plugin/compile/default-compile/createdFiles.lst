@@ -1,0 +1,8 @@
+com\curso\servicio\dto\PeliculaDTO.class
+com\curso\modelo\negocio\GestorPeliculas.class
+com\curso\modelo\persistencia\InterfaceDAO.class
+com\curso\modelo\persistencia\PeliculaJPAImplementationDAO.class
+com\curso\servicio\ServicioPeliculas.class
+com\curso\modelo\persistencia\AbstractJPADAO.class
+com\curso\modelo\persistencia\PeliculaDAO.class
+com\curso\modelo\entidad\Pelicula.class
