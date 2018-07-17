@@ -1,0 +1,16 @@
+Hay que cambiarlo todo aqui
+
+Proyecto con java 1.7
+
+
+
+
+Creamos la bbdd y tabla:
+
+
+DROP TABLE IF EXISTS `pelicula`; CREATE TABLE `pelicula` ( `id` int(10) NOT NULL, `titulo` varchar(50) NOT NULL, `director` varchar(50) NOT NULL, `genero` varchar(50) NOT NULL, `year` int(4) NOT NULL ) ENGINE=InnoDB DEFAULT CHARSET=latin1; 
+
+Insertarmos datos:
+
+INSERT INTO `pelicula`(`id`, `titulo`, `director`, `genero`, `year`) VALUES (null,'Hola1','Almodovar','Terror',2018)
+INSERT INTO `pelicula`(`id`, `titulo`, `director`, `genero`, `year`) VALUES (3,'Hola3','Amenavar','Terror',2017)
