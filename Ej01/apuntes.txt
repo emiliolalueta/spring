@@ -1,6 +1,6 @@
 Hay que cambiarlo todo aqui
 
-Proyecto con java 1.7
+Proyecto con java 1.8   ?????
 
 
 
@@ -12,5 +12,6 @@ DROP TABLE IF EXISTS `pelicula`; CREATE TABLE `pelicula` ( `id` int(10) NOT NULL
 
 Insertarmos datos:
 
-INSERT INTO `pelicula`(`id`, `titulo`, `director`, `genero`, `year`) VALUES (null,'Hola1','Almodovar','Terror',2018)
-INSERT INTO `pelicula`(`id`, `titulo`, `director`, `genero`, `year`) VALUES (3,'Hola3','Amenavar','Terror',2017)
+INSERT INTO `coches`(`id`, `marca`, `modelo`, `matricula`) VALUES (1,'Seat','Cordoba','2679BMV')
+INSERT INTO `coches`(`id`, `marca`, `modelo`, `matricula`) VALUES (2,'Renault','Megane','2519BMV')
+INSERT INTO `coches`(`id`, `marca`, `modelo`, `matricula`) VALUES (3,'Fiat','Punto','1675BMV')
