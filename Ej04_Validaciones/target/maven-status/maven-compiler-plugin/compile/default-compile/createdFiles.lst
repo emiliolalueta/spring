@@ -1,0 +1,8 @@
+PruebasJSR303.class
+com\curso\modelo\persistencia\AbstractJPADAO.class
+com\curso\modelo\persistencia\PeliculaJPAImplementationDAO.class
+com\curso\modelo\negocio\GestorPeliculas.class
+com\curso\modelo\persistencia\PeliculaDAO.class
+com\curso\controlador\ControladorPeliculas.class
+com\curso\modelo\entidad\Pelicula.class
+com\curso\modelo\persistencia\InterfaceDAO.class
