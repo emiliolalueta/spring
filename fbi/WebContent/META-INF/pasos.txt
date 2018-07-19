@@ -1,0 +1,278 @@
+############################################################################################################# 
+# i. Configurar el filtro interceptor de las peticiones web
+#############################################################################################################  
+  <filter>
+    <display-name>springSecurityFilterChain</display-name>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+############################################################################################################# 
+# ii. Crear el fichero para la configuración de seguridad con una seguridad mínima y cargarlo en el web.xml
+############################################################################################################# 
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<http auto-config="true">
+		<intercept-url pattern="/**" access="ROLE_AGENTE_ESPECIAL" />
+	</http>
+
+	<authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="Fernando" password="1234" authorities="ROLE_AGENTE" />
+				<user name="Mulder" password="fox" authorities="ROLE_AGENTE_ESPECIAL" />
+				<user name="Scully" password="dana" authorities="ROLE_AGENTE_ESPECIAl" />
+				<user name="Skinner" password="walter" authorities="ROLE_DIRECTOR" />
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
+
+</beans:beans>
+
+############################################################################################################# 
+# ii (cont). Crear el fichero para la configuración de seguridad con una seguridad mínima y cargarlo en el web.xml
+############################################################################################################# 
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+           classpath:configuracion-expedientes-x.xml
+           /WEB-INF/seguridad.xml
+        </param-value>
+  </context-param>
+  
+############################################################################################################# 
+# iii.  Configurar el login/logout explícitamente
+############################################################################################################# 
+ 	<http auto-config="true">
+		<intercept-url pattern="/**" access="ROLE_AGENTE_ESPECIAL" />
+		<form-login login-page="/paginas/nuestro-login.jsp" 
+			authentication-failure-url="/paginas/nuestro-login.jsp?login_error" />
+		<logout logout-success-url="/paginas/desconectado.jsp"/>
+	</http> 
+
+############################################################################################################# 
+# iv.  Solucionar problemas de recursos, CSS e imágenes
+############################################################################################################# 
+	<intercept-url pattern="/paginas/*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<intercept-url pattern="/imagenes/*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<intercept-url pattern="/css/*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+	<intercept-url pattern="/*" access="ROLE_AGENTE_ESPECIAL" />
+		
+############################################################################################################# 
+# iv.  Solucionar problemas de recursos, CSS e imágenes (v3.1)
+############################################################################################################# 		
+	<http pattern="/paginas/*" security="none" />
+	<http pattern="/imagenes/*" security="none" />
+	<http pattern="/css/*" security="none" />
+	
+############################################################################################################# 
+# v.    Proteger contraseñas de los usuarios encriptándolas
+############################################################################################################# 	
+	<authentication-manager>
+		<authentication-provider>
+		<password-encoder hash="md5">
+			<salt-source user-property="username"/>
+		</password-encoder>
+			<user-service>
+				<user name="Fernando" password="94c0a821ece1959c48dbc789bcf024b9" authorities="ROLE_AGENTE" />
+				<user name="Mulder" password="cd2adcfcfae70a64c5870b7f79ae4945" authorities="ROLE_AGENTE_ESPECIAL" />
+				<user name="Scully" password="4fb2b097cb9690d77cf7f2246b782fc3" authorities="ROLE_AGENTE_ESPECIAl" />
+				<user name="Skinner" password="829679019772c945c70602096268737c" authorities="ROLE_DIRECTOR" />				
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
+		
+############################################################################################################# 
+# vi.    Añadir funcionalidad "Remember Me"
+#############################################################################################################
+	<remember-me key="expedientesx" token-validity-seconds="86400"/>
+
+############################################################################################################# 
+# vii.    Seguridad en el canal de transporte (HTTPS) - Configurar restricciones y puertos
+#############################################################################################################
+	<http auto-config="true" >
+		<intercept-url pattern="/*" access="ROLE_AGENTE_ESPECIAL" requires-channel="https"/>
+		<form-login login-page="/paginas/nuestro-login.jsp" 
+			authentication-failure-url="/paginas/nuestro-login.jsp?login_error" />
+		<logout logout-success-url="/paginas/desconectado.jsp"/>
+		<remember-me key="expedientesx" token-validity-seconds="86400"/>
+
+		<port-mappings>
+			<port-mapping http="8080" https="8443"/>
+		</port-mappings>
+
+	</http>
+	
+############################################################################################################# 
+# vii.    Seguridad en el canal de transporte (HTTPS) - Crear conector SSL en Servidor
+#############################################################################################################	
+	<Connector SSLEnabled="true" acceptCount="100" 
+		connectionTimeout="20000" executor="tomcatThreadPool" 
+		keyAlias="tcserver" keystoreFile="${catalina.base}/conf/tcserver.keystore" 
+		keystorePass="changeme" 
+		maxKeepAliveRequests="15" port="8443" protocol="HTTP/1.1" 
+		redirectPort="8443" scheme="https" secure="true"/>
+	
+############################################################################################################# 
+# viii.    Control de la expiración de sesiones
+#############################################################################################################
+
+		<logout logout-success-url="/paginas/desconectado.jsp" delete-cookies="JSESSIONID"/>
+
+		<session-management invalid-session-url="/paginas/sesion-expirada"/>
+		
+############################################################################################################# 
+# ix.    Control de la concurrencia de sesiones
+#############################################################################################################	
+		<session-management invalid-session-url="/paginas/sesion-expirada.jsp">
+			<concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/>
+		</session-management>
+			
+############################################################################################################# 
+# ix (Cont).    Control de la concurrencia de sesiones
+#############################################################################################################	
+  <listener>
+    <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+  </listener>
+
+############################################################################################################# 
+# x.	Uso de la librería de etiquetas (Spring Security Taglibs)
+#############################################################################################################	  
+	<sec:authorize ifAnyGranted="ROLE_AGENTE_ESPECIAL,ROLE_DIRECTOR">
+		<a href="<c:url value='/expedientesx/clasificar?id=${expediente.id}'/>">clasificar</a>
+		<a href="<c:url value='/expedientesx/desclasificar?id=${expediente.id}'/>">desclasificar</a>
+	</sec:authorize>
+
+############################################################################################################# 
+# xi.	Uso Expresiones SpEL para proteger URL’s 
+#############################################################################################################
+	<http auto-config="true" use-expressions="true" >
+		<intercept-url pattern="/*" access="isAuthenticated()" requires-channel="https"/>
+
+
+############################################################################################################# 
+# xii.	Uso Expresiones SpEL con etiquetas Security Taglib
+#############################################################################################################
+<sec:authorize access="hasAnyRole('ROLE_AGENTE_ESPECIAL','ROLE_DIRECTOR')">
+
+
+############################################################################################################# 
+# xiii.	Seguridad en la invocación de métodos de negocio con anotaciones Spring Security
+#############################################################################################################
+	<access-denied-handler error-page="/paginas/acceso-denegado.jsp"/>
+	<global-method-security secured-annotations="enabled"/>
+	
+############################################################################################################# 
+# xiii (Cont).	Seguridad en la invocación de métodos de negocio con anotaciones Spring Security
+#############################################################################################################	
+	@Secured("ROLE_AGENTE_ESPECIAL,ROLE_DIRECTOR")
+	void clasificar(Expediente expediente);
+	
+	@Secured("ROLE_AGENTE_ESPECIAL,ROLE_DIRECTOR")
+	void desclasificar(Expediente expediente);
+
+############################################################################################################# 
+# xiv.	Seguridad en la invocación de métodos de negocio con anotaciones JSR-250
+#############################################################################################################
+
+	<global-method-security secured-annotations="enabled" jsr250-annotations="enabled"/>
+	
+############################################################################################################# 
+# xiv (Cont).	Seguridad en la invocación de métodos de negocio con anotaciones JSR-250
+#############################################################################################################
+	@RolesAllowed("ROLE_AGENTE_ESPECIAL,ROLE_DIRECTOR")
+	void desclasificar(Expediente expediente);
+
+############################################################################################################# 
+# xv.	Seguridad en la invocación de métodos de negocio con Pointcuts de AspectJ
+#############################################################################################################
+	<global-method-security>
+		<protect-pointcut access="ROLE_AGENTE_ESPECIAL,ROLE_DIRECTOR" 
+			expression="execution(* expedientesx.negocio.Servicio*.*clasificar(..))"/>
+	</global-method-security>
+
+
+############################################################################################################# 
+# xvi.	Seguridad en la invocación de métodos de negocio con Expresiones SpEL (Preinvocación)
+#############################################################################################################
+	<global-method-security pre-post-annotations="enabled"/>
+	
+############################################################################################################# 
+# xvi (Cont).	Seguridad en la invocación de métodos de negocio con Expresiones SpEL (Preinvocación)
+#############################################################################################################
+	@PreAuthorize("hasRole('ROLE_DIRECTOR')")
+	void clasificar(Expediente expediente);
+
+	@PreAuthorize("hasRole('ROLE_DIRECTOR') or #expediente.investigador == authentication.name")
+	void desclasificar(Expediente expediente);
+
+############################################################################################################# 
+# xvii.	Seguridad en la invocación de métodos de negocio con Expresiones SpEL (Postinvocación)
+#############################################################################################################	
+	@PreAuthorize("hasAnyRole('ROLE_AGENTE_ESPECIAL','ROLE_DIRECTOR')")
+	@PostAuthorize("hasRole('ROLE_DIRECTOR') or returnObject.investigador == authentication.name")
+	Expediente mostrar(Long id);
+	
+
+############################################################################################################# 
+# xviii.	Seguridad en la invocación de métodos de negocio con Expresiones SpEL (Filtro de resultados)
+#############################################################################################################	
+	@PostFilter("not filterObject.informe.contains(principal.username)")
+	List<Expediente> mostrarTodos();
+
+############################################################################################################# 
+# ixx.	Utilización del sistema de votantes - Explicitar la configuración del espacio de nombres Security
+#############################################################################################################
+	<http use-expressions="true" access-decision-manager-ref="accessDecisionManager">
+
+	<beans:bean id="accessDecisionManager"
+		class="org.springframework.security.access.vote.AffimativeBased">
+		<beans:constructor-arg>
+			<beans:list>
+				<beans:bean class="org.springframework.security.access.vote.RoleVoter">
+					<beans:property name="rolePrefix" value="ROLE_" />
+				</beans:bean>
+				<beans:bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+				<beans:bean class="org.springframework.security.web.access.expression.WebExpressionVoter"/>
+			</beans:list>
+		</beans:constructor-arg>
+	</beans:bean>
+
+############################################################################################################# 
+# ixx.	Utilización del sistema de votantes - Personalizar la configuracion del accessDecisionManager
+#############################################################################################################
+	<beans:bean id="accessDecisionManager"
+		class="org.springframework.security.access.vote.UnanimousBased">
+		<beans:constructor-arg>
+			<beans:list>
+				<beans:bean class="org.springframework.security.access.vote.RoleVoter">
+					<beans:property name="rolePrefix" value="ROLE_" />
+				</beans:bean>
+				<beans:bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+				<beans:bean class="org.springframework.security.web.access.expression.WebExpressionVoter"/>
+				<beans:bean class="expedientesx.util.HorarioVoter"/>
+			</beans:list>
+		</beans:constructor-arg>
+	</beans:bean>	
+
+############################################################################################################# 
+# xx.	Personalizar la cadena de filtros de seguridad - Crear un filtro para recordar el usuario que hace login
+#############################################################################################################	
+		<custom-filter ref="recordarLoginFilter" before="FORM_LOGIN_FILTER"/>
+		<beans:bean id="recordarLoginFilter" class="expedientesx.util.RecordarLoginFilter"/>
+		
+
+############################################################################################################# 
+# xx.	Personalizar la cadena de filtros de seguridad - Crear un filtro para evitar el uso del  botón “volver” tras hacer logout
+#############################################################################################################			
+		<custom-filter ref="botonVolverFilter" after="LAST"/>
+		<beans:bean id="botonVolverFilter" class="expedientesx.util.BotonVolverFilter"/>
