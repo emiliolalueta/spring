@@ -1,0 +1,6 @@
+https://www.youtube.com/watch?v=LA2RWWGIfDQ
+
+http://localhost:8080/MVCRequestParamMapWebApp/
+
+
+con java 1.8  y spring 4   funciona
