@@ -1,0 +1,5 @@
+Pagina de inicio
+
+http://localhost:8080/pruebaClient/samplePruebaProxy/TestClient.jsp
+
+webservice cliente
