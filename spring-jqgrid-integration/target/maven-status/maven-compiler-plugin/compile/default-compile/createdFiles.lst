@@ -1,0 +1,7 @@
+org\krams\tutorial\service\UserService.class
+org\krams\tutorial\json\CustomGenericResponse.class
+org\krams\tutorial\controller\MediatorController.class
+org\krams\tutorial\service\IUserService.class
+org\krams\tutorial\domain\User.class
+org\krams\tutorial\json\CustomUserResponse.class
+org\krams\tutorial\controller\UserController.class
