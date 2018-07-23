@@ -1,0 +1,177 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+  <meta charset="UTF-8"/>  
+  
+  <link rel="stylesheet" href="/bootstrap.min.css" media="screen"/>
+  <link rel="stylesheet" type="text/css" href="/pro_dropdown_3.css" />
+  
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/cupertino/jquery-ui.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.5/css/ui.jqgrid.min.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.5/js/jquery.jqgrid.min.js"></script>
+  <title> </title>
+</head>
+<body>
+  <div class="container">
+  <!-- style="padding:50px 250px;" -->
+  <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-lg-offset-3">
+            <a href="/products"><img src="/logo.png" style="width:100%;"/></a>
+            
+        </div>
+    </div>
+	<div th:replace="fragments/menu :: menu">...</div>
+  
+  
+  
+  
+    <div class="row">
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <h1>Listado de clientes</h1>
+             </div>    
+      	</div> 
+    
+    
+    
+	<table id="photos" class="display" cellspacing="0" width="100%">
+    </table>
+	<div id="pager2"></div>
+	 <div th:replace="fragments/footer :: footer">...</div>
+  </div>
+</body>
+</html>
+<script type="text/javascript">
+  $(document).ready(function(){
+	$("#photos").jqGrid({
+		
+		url:'/cliente',
+		datatype: "json",				
+		colNames:['ID','NOMBRE', 'APELLIDO','TELEFONO'],
+        colModel:[       	  
+            {name:'customerId', index:'customerId', width:290,editable:true, resizable:false, align:"center"},
+            {name:'firstName', index:'firstName', width:280,editable:true,resizable:false, sortable:true},
+            {name:'lastName', index:'lastName', width:280,editable:true},
+            {name:'phone', index:'phone', width:270,editable:true}  
+        ],			
+		rowNum:10,
+		loadonce: true,
+		rowList:[10,20,30],
+		pager: '#pager2',
+		sortname: 'id',
+		viewrecords: true,
+		sortorder: "desc",
+		caption:"",
+		editable: true
+	});
+	$("#photos").jqGrid('navGrid','#pager2',
+	{
+		edit:true, edittitle: "Edit Post", width: 500,
+		add:true, addtitle: "Add Post", width: 500,
+		del:true,
+		search: true,
+		refresh: true,
+		view:true
+	},
+    //Edit Options. save key parameter will keybind the Enter key to submit.
+	{
+		editCaption: "Editar cliente", 
+		edittext: "Edit", 
+		closeOnEscape: true, 
+		closeAfterEdit: true, 
+		savekey: [true, 13], 
+		errorTextFormat: commonError, 
+		width: "500", 
+		reloadAfterSubmit: true, 
+		bottominfo: "Fields marked with (*) are required", 
+		top: "60", 
+		left: "5", 
+		right: "5",
+		onclickSubmit: function (response, postdata) {
+			//call edit button
+			EditComment(postdata);
+		}
+	},
+	//add Options. save key parameter will keybind the Enter key to submit.
+	{
+		addCaption: "Añadir cliente", 
+		addtext: "Add", 
+		closeOnEscape: true, 
+		closeAfterEdit: true, 
+		savekey: [true, 13], 
+		errorTextFormat: commonError, 
+		width: "500", 
+		reloadAfterSubmit: true, 
+		bottominfo: "Fields marked with (*) are required", 
+		top: "60", 
+		left: "5", 
+		right: "5",
+		onclickSubmit: function (response, postdata) {
+			AddPost(postdata);
+		}
+	},
+	//delete Options. save key parameter will keybind the Enter key to submit.
+	{
+		deleteCaption: "Borrar cliente", 
+		deletetext: "Delete Post", 
+		closeOnEscape: true, 
+		closeAfterEdit: true, 
+		savekey: [true, 13], 
+		errorTextFormat: commonError, 
+		width: "500", 
+		reloadAfterSubmit: true, 
+		bottominfo: "Fields marked with (*) are required", 
+		top: "60", 
+		left: "5", 
+		right: "5",
+		onclickSubmit: function (response, postdata) {
+			DeletePost(postdata);
+		}
+	}
+	
+	
+	);
+	function commonError(data) {
+        return "Error Occured during Operation. Please try again";
+    }
+	function EditPost(params) {
+		//Here you need to define ajax call for update records to server
+		
+			
+		
+		console.log(params);
+	}
+	function AddPost(params) {
+		alert("pasa por aqui" + params );		
+        $.ajax({
+                data:  params,
+                url:   '/guardar',
+                type:  'post',
+                beforeSend: function () {
+                        $("#resultado").html("Procesando, espere por favor...");
+                },
+                success:  function (response) {
+                        $("#resultado").html(response);
+                }
+        });
+		console.log(params);
+	}
+	function DeletePost(params) {
+		//params=parseInt(params.substring(3)); 
+		alert(params);
+		
+		 $.ajax({
+             data:  params,
+             url:   '/borrar',
+             type:  'post',
+             beforeSend: function () {
+                     $("#resultado").html("Procesando, espere por favor...");
+             },
+             success:  function (response) {
+                     $("#resultado").html(response);
+             }
+     });
+		console.log(params);
+	}
+  });
+</script>

@@ -1,0 +1,130 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>jqGrid Tutorial</title>
+ 
+<link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/base/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="http://trirand.com/blog/jqgrid/themes/ui.jqgrid.css" />
+  
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+ 
+<script src="http://trirand.com/blog/jqgrid/js/i18n/grid.locale-en.js" type="text/javascript"></script>
+<script src="http://trirand.com/blog/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+
+
+ <link rel="stylesheet" href="/bootstrap.min.css" media="screen"/>
+<link rel="stylesheet" type="text/css" href="/pro_dropdown_3.css" />
+
+
+<script type="text/javascript">
+jQuery.extend(
+        jQuery.jgrid.edit, {
+            ajaxEditOptions: { contentType: "application/json" },
+            recreateForm: true,
+            serializeEditData: function(postData) {
+                return JSON.stringify(postData);
+            },
+            afterSubmit: function (response, postdata) {
+                var res = jQuery.parseJSON(response.responseText);
+                return [true, "", res.d];
+            }
+        }
+    );
+ 
+$(document)
+.ready(
+        function() {
+            $("#list").jqGrid(
+                            {
+                            	
+                            	 height: "35%",
+                                 width: "150%",
+                                 editing: true,
+                                 autoload: true,
+                                 paging: true,    
+                                 rowClick: function(args) {
+                                     showDetailsDialog("Edit", args.item);
+                                 },
+                              
+                                 url : '/cliente',
+                                 datatype : 'json',
+                                 mtype : 'GET',
+                                 colNames:['ID','NOMBRE', 'APELLIDO','TELEFONO'],
+                                 colModel:[
+                                	  
+                                     {name:'customerId', index:'customerId', width:290,editable:true, resizable:false, align:"center"},
+                                     {name:'firstName', index:'firstName', width:280,editable:true,resizable:false, sortable:true},
+                                     {name:'lastName', index:'lastName', width:280,editable:true},
+                                     {name:'phone', index:'phone', width:290,editable:true}  
+                                 ],
+                                       
+                                                                
+                                pager : '#pager',
+                                rowNum : 10,
+                                rowList : [ 10, 20, 30, 50, 70 ],
+                                sortname : 'invid',
+                                sortorder : 'desc',
+                                viewrecords : true,
+                                gridview : true,
+                                caption : 'Listado de clientes',
+                                jsonReader : {
+                                    repeatitems : true,
+                                },
+                                editurl : "/guardar",
+                                datatype : 'json',
+                                editable: true  
+                                
+                                
+                            });
+            
+            
+            jQuery("#list").jqGrid('navGrid', '#pager', {
+                edit : true,
+                add : true, 
+                del : true,
+                search : true,                       
+                refresh: true,
+        		view:true              
+             
+             
+            }
+            
+            
+            );
+        });
+    
+</script>
+</head>
+<body>
+
+<div class="container">
+	<div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-lg-offset-3">
+            <a href="/products"><img src="/logo.png" style="width:100%;"/></a>
+            
+        </div>
+    </div>
+	<div th:replace="fragments/menu :: menu">...</div>
+	
+	
+	 <div class="page-header" id="banner">
+        <div class="row">
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <h1>Listado de clientes</h1>
+             </div>    
+      	</div> 
+	
+    <table id="list">
+        <tr>
+            <td />
+        </tr>
+    </table>    
+     	  
+	 </div>
+    
+    <div id="pager"></div>
+     <div th:replace="fragments/footer :: footer">...</div>
+</div>   
+    
+    
+</body>
+</html>

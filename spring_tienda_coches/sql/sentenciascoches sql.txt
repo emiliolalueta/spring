@@ -1,0 +1,103 @@
+CREATE TABLE `roles` (
+  `id` int(6) NOT NULL AUTO_INCREMENT,
+  `role` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+ 
+CREATE TABLE `users` (
+  `id` int(6) NOT NULL AUTO_INCREMENT,
+  `login` varchar(20) NOT NULL,
+  `password` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+ 
+CREATE TABLE `user_roles` (
+  `user_id` int(6) NOT NULL,
+  `role_id` int(6) NOT NULL,
+  KEY `user` (`user_id`),
+  KEY `role` (`role_id`),
+  CONSTRAINT `user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `role` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS customer (  
+  customerid int(30) NOT NULL AUTO_INCREMENT,
+  firstname varchar(50) DEFAULT NULL,
+  lastname varchar(50) DEFAULT NULL,  
+  phone int(20) DEFAULT NULL,
+  PRIMARY KEY(customerid)  	
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS products (
+  id int(20) NOT NULL AUTO_INCREMENT,  
+  marca varchar(50) DEFAULT NULL,
+  precio int(50) DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS customerorder (
+  orderid int(20) NOT NULL AUTO_INCREMENT,
+  total int(10) DEFAULT NULL,
+  products varchar(50) DEFAULT NULL,
+  customerid int(30) NOT NULL,
+  PRIMARY KEY (orderid) 
+) ENGINE=InnoDB;
+
+// CONSTRAINT fk_order_customer FOREIGN KEY (customerid) REFERENCES customer(customerid)  
+
+DROP TABLE ORDER_PRODUCTS;
+
+CREATE TABLE IF NOT EXISTS order_products(
+  order_id int(20) NOT NULL,  
+  product_id int(20) NOT NULL,    
+  CONSTRAINT fk_order_id FOREIGN KEY (order_id) REFERENCES customerorder(orderid),  
+  CONSTRAINT fk_product_id FOREIGN KEY (product_id) REFERENCES products(id)
+)
+
+CREATE TABLE customer_order (
+ customer_id int(30) NOT NULL,
+  order_id int(20) NOT NULL,
+  KEY fk_customer (customer_id),
+  KEY fk_order (order_id),
+  CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES customer (customerid),
+  CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES customerorder (orderid) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+//ON DELETE CASCADE ON UPDATE CASCADE
+//ALTER TABLE customer ADD FOREIGN KEY (customerid) REFERENCES customerorder (customer) ;
+//CONSTRAINT fkpersonas FOREIGN KEY (dep, id) REFERENCES departamentos(dep,id). 
+//ALTER TABLE ADD FOREIGN KEY (dep) REFERENCES departamentos(dep) 
+
+INSERT INTO customer (customerid,firstname,lastname,phone) VALUES(1,'Emilio','Garcia',923345633);
+INSERT INTO customer (customerid,firstname,lastname,phone) VALUES(2,'Sandra','Garcia',924345633);
+INSERT INTO customer (customerid,firstname,lastname,phone) VALUES(3,'Macarena','Lopez',123345633);
+INSERT INTO customer (customerid,firstname,lastname,phone) VALUES(4,'Santi','Arroba',923345633);
+
+INSERT INTO customerorder (orderid,total,products,customerid) VALUES(1,3,'Ford',1);
+INSERT INTO customerorder (orderid,total,products,customerid) VALUES(2,5,'Seat',2);
+INSERT INTO customerorder (orderid,total,products,customerid) VALUES(3,6,'Renault',3);
+INSERT INTO customerorder (orderid,total,products,customerid) VALUES(4,7,'Dacia',4);
+
+INSERT INTO products (id,marca,precio) VALUES(1,'Seat',3000);
+INSERT INTO products (id,marca,precio) VALUES(2,'Ford',2000);
+INSERT INTO products (id,marca,precio) VALUES(3,'Dacia',4000);
+
+
+
+-------ejemplo-----------------
+CREATE TABLE venta
+(
+    id_factura INT NOT NULL,
+    id_cliente INT NOT NULL,
+    cantidad   INT,
+    PRIMARY KEY(id_factura),
+    INDEX (id_cliente)
+) TYPE = INNODB;
+
+ALTER TABLE venta ADD FOREIGN KEY(id_cliente) REFERENCES cliente(id_cliente);
+
+--------------------------------
+//ALTER TABLE customer ADD FOREIGN KEY (customerid) REFERENCES customerorder (customer);  
+//FOREIGN KEY (customerid) REFERENCES customerorder(customer)   
+

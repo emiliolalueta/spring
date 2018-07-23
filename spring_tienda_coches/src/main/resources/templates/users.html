@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gestion de peticiones</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" href="/bootstrap.min.css" media="screen"/>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-lg-offset-3">
+            <a href="/products"><img src="/logo.png" style="width:100%;"/></a>            
+        </div>
+    </div>         
+        <div class="row">
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <h1>Lista de usuarios</h1>
+
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Login</th>
+                        <th>Pass</th>
+                        <th>Rol</th>                        
+                    </tr>
+                    </thead>
+                    <tbody>            
+                       
+					 <tr th:each="user : ${orders}">
+                          <td th:text="${user.orderid}"></td>                  
+                        <td th:text="${user.total}"></td>
+                       <!--   
+                        <td>
+                            <table>
+                                <tr th:each="role :${users.role}">
+                                    <td th:text="${role.role}"></td>
+                                </tr>
+                            </table>
+                        </td>
+                         
+                        <td th:text="${user.login"></td>
+                        <td th:id="${user.Id}"><button class="btn btn-danger delete-order">Completar petición</button></td>
+                       -->   
+                        
+                    </tr> 
+          			   
+                    </tbody>
+                </table>                
+                 
+            </div>
+        </div>
+    </div>
+    <div th:replace="fragments/footer :: footer">...</div>
+
+
+
+</body>
+</html>
