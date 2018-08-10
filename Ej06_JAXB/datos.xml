@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:disco xmlns:ns2="http://ws/">
+    <titulo>The dark side of the moon</titulo>
+    <grupo>Pink Floyd</grupo>
+    <year>1973</year>
+</ns2:disco>
