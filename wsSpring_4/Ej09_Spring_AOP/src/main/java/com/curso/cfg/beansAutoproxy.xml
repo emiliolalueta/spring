@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<!-- Advice: qué hay que hacer -->
+	<bean id="logAdvice" class="com.curso.modelo.aop.LogAdvice"/>
+	<bean id="cronometroAdvice" class="com.curso.modelo.aop.CronometroAdvice"/>
+
+	<!-- Pointcut: CUANDO -->
+	<bean id="negocioPointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut">
+		<!-- PATRONES 
+		.*insertarCliente : El metodo 'insertarCliente' de cualquier clase y paquete
+		.*insertar.*      : El metodo empieza por 'insertar'
+		negocio.GestorClientes.*(..) : Cualquier método de la clase GestorClientes
+		negocio.*.*(..)   : Cualquier metodo del paquete negocio
+		-->		
+		<property name="pattern" value="com.curso.modelo.negocio.*.*(..)"/>		
+	</bean>
+
+	<!-- El advisor junta el QUE con el CUANDO -->
+	<bean id="logAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="advice" ref="logAdvice"/>
+		<property name="pointcut" ref="negocioPointcut"/>
+	</bean>
+	<bean id="cronometroAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="advice" ref="cronometroAdvice"/>
+		<property name="pointcut" ref="negocioPointcut"/>
+	</bean>
+	
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+	
+	<bean id="gestorClientes" class="com.curso.modelo.negocio.GestorClientesImpl"/>
+	<bean id="gestorEmpleados" class="com.curso.modelo.negocio.GestorEmpleados"/>
+	
+
+</beans>

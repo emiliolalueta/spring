@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+
+</head>
+
+<script>
+
+
+function listar(){
+	$.ajax( { url : 'movidas/',
+		  success : mostrarRespuesta } );	
+}
+
+function mostrarRespuesta(lista){
+	for(a=0; a<lista.length; a++){
+		alert(lista[a].nombre);
+	}	
+}
+
+function insertar(){
+	
+	var dto = { 
+					"id"    : 10,
+					"nombre" : "Ringo"   
+			  };
+	
+    $.ajax({
+        url      : 'movidas/',
+        type     : 'POST',
+        success  : function (rt) {
+        	
+        },
+        data        : JSON.stringify(dto),
+        contentType : 'application/json;odata=verbose'
+    });	
+
+}
+
+</script>
+
+
+<body>
+
+	<input type="button" value="Listar" onClick="listar()"/>
+	<input type="button" value="Insertar" onClick="insertar()"/>
+
+</body>
+</html>
