@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="servicioCoches" class="com.curso.modelo.negocio.ServicioCochesImpl"/>
+	
+	<bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+		<property name="service" ref="servicioCoches"/>
+		<property name="serviceName" value="ServicioCoches"/>
+		<property name="serviceInterface" value="com.curso.modelo.negocio.ServicioCoches"/>
+		<property name="registryPort" value="1199"/>	
+	</bean>
+
+</beans>

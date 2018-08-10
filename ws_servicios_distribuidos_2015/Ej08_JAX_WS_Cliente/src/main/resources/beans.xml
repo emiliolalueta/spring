@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<bean id="servicioCoches" class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean">
+    <property name="serviceInterface" value="com.curso.ws.ServicioCoches"/>
+    <property name="wsdlDocumentUrl" value="http://localhost:8081/ServicioCoches?wsdl"/>
+    <property name="namespaceUri" value="http://ws.curso.com/"/>
+    <property name="serviceName" value="ServicioCoches"/>
+    <property name="portName" value="ServicioCochesPort"/>
+</bean>
+
+
+</beans>

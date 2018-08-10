@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="servicioCoches" class="com.curso.modelo.servicio.ServicioCochesImpl"/>
+		
+	<bean name="/ServicioCoches" class="org.springframework.remoting.caucho.HessianServiceExporter">
+	    <property name="service" ref="servicioCoches"/>
+	    <property name="serviceInterface" value="com.curso.modelo.servicio.ServicioCoches"/>
+	</bean>		
+
+
+</beans>

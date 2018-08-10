@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.1.xsd
+		http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+
+
+	<int-stream:stdin-channel-adapter id="producer"
+		channel="messageChannel" />
+		
+	<int-stream:stdout-channel-adapter
+		id="consumer1" channel="messageChannel" append-newline="true" />		
+	<int-stream:stdout-channel-adapter
+		id="consumer2" channel="messageChannel" append-newline="true" />		
+
+
+	<!-- como un topic -->
+	<!-- <int:publish-subscribe-channel id="messageChannel" /> -->
+
+
+	<!-- como una queue -->
+	<int:channel id="messageChannel">
+		<int:queue capacity="2" />
+	</int:channel>
+	
+	<int:poller id="defaultPoller" default="true"
+		max-messages-per-poll="5" fixed-rate="200" />
+
+
+</beans>

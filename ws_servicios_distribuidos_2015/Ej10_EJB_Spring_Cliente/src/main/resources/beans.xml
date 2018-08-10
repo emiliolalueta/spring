@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate">
+		<property name="environment">
+			<props>
+				<prop key="java.naming.factory.initial">org.jnp.interfaces.NamingContextFactory
+				</prop>
+				<prop key="java.naming.provider.url">127.0.0.1:1099</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="saludador"
+		class="org.springframework.ejb.access.SimpleRemoteStatelessSessionProxyFactoryBean">
+		<property name="jndiName" value="Ej10_EJB_EAR/Saludador/remote" />
+		<property name="jndiTemplate" ref="jndiTemplate" />
+		<property name="businessInterface" value="com.curso.modelo.negocio.SaludadorRemote" />
+	</bean>
+
+</beans>
